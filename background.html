@@ -1,18 +1,7 @@
 <script type="text/javascript">
 
-// Set up localStorage blacklist
-// NOTE: localStorage can only store primitive data types, not JS objects
-/*
-if (localStorage["blacklist.0.url"] == null) {
-	localStorage["blacklist.0.url"] = "www.facebook.com";
-}
-if (localStorage["blacklist.0.lastAccessed"] == null) {
-	localStorage["blacklist.0.lastAccessed"] = null;
-}
-*/
-
 var RESET_BLACKLIST_TIME = 1000 * 60 * 20; // in milliseconds, last number is minutes
-var RESET_BLACKLIST_TIME = 1000; // For test, 1 second reset
+var RESET_BLACKLIST_TIME = 3000; // For test, 1 second reset
 
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
@@ -28,13 +17,13 @@ chrome.extension.onRequest.addListener(
 			// Send response to redirect to original site
 			sendResponse({
 				finishedTask: true,
-				destination: getHostFromUID(uid),
+				destination: getDestFromUID(uid),
 				shouldBlock: false
 			});
 		} else {
 			console.log("NOT Matched bewap = done");
 			sendResponse({
-				shouldBlock: shouldBlock(host),
+				shouldBlock: shouldBlock(host,loc.href),
 				uid: getUID(host),
 				service: localStorage["bewap_service"]
 			});
@@ -43,28 +32,30 @@ chrome.extension.onRequest.addListener(
 );
 
 // Returns a boolean on whether the URL should be blocked.
-function shouldBlock(url) {
+function shouldBlock(host,url) {
 	var s = localStorage["blacklist_sites"].split(" ");
 	var found = false;
 	for(var j = 0; j < s.length; j++) {
-		if(s[j] == url) found=true;
+		if(s[j] == host) found=true;
 	}
 	if(!found) return false;
 
 	var i = 0;
 	while (localStorage["blacklist." + i + ".url"] !== undefined) {
 		var blacklistURL = localStorage["blacklist." + i + ".url"];
-		if (blacklistURL === url) {
+		if (blacklistURL === host) {
 			// Returns true if not recently accessed and passed a test
+			console.log(url);
+			localStorage["blacklist."+i+".dest"] = url;
 			return !recentlyAccessed(i);
 		}
 		i++;
 	} 
-	localStorage["blacklist."+i+".url"] = url;
+	console.log(url);
+	localStorage["blacklist."+i+".url"] = host;
+	localStorage["blacklist."+i+".dest"] = url;
 	localStorage["blacklist."+i+".lastAccessed"] = null;
 	return !recentlyAccessed(i);
-   //console.log("returning should not block");
-   //return false; 
 }
 
 // Returns the UID of that host
@@ -85,11 +76,20 @@ function getHostFromUID(uid) {
 	return localStorage[_storageURLKey(uid)];
 }
 
+function getDestFromUID(uid) {
+	return localStorage[_storageDestKey(uid)];
+}
+
 // Returns the String used to store the URL for a given UID
 // e.g. "blacklist.0.url"
 function _storageURLKey(uid) {
 	return "blacklist." + uid + ".url";
 }
+
+function _storageDestKey(uid) {
+	return "blacklist." + uid + ".dest";
+}
+
 
 function _storageDateKey(uid) {
 	return "blacklist." + uid + ".lastAccessed";

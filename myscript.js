@@ -20,7 +20,7 @@ chrome.extension.sendRequest({location: document.location}, function(response) {
 		document.location = service + "?uid=" + response.uid + "&w=1";
 	} else if (response.finishedTask) {
 		console.log("Destination: %s", response.destination);
-		document.location = "http://" + response.destination;
+		document.location = response.destination;
 	}
 });
 
