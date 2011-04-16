@@ -15,7 +15,7 @@ function save_options() {
 	var s = "";
 	for(var i = 0; i < d.children.length; i++) {
 		s += d.children[i].id + " ";
-
+		localStorage["weight:"+d.children[i].id] = d.children[i].weight;
 	}
 	localStorage["blacklist_sites"] = s;
 
@@ -55,11 +55,13 @@ function remove(x) {
 
 function add() {
 	var s = prompt("Please enter the URL of the site you would like to blacklist (ie facebook.com).", "");
+	var w = prompt("Please enter the weight of the site (an integer)", "1");
 	if (s != "") {
 		var d = $('sites');
 		var d1 = document.createElement('div');
-		d1.innerHTML = s + "<span style='padding-left: 20px; cursor:pointer' onclick='remove(this);'>remove</span>"; 
+		d1.innerHTML = s + " - " + w + "<span style='padding-left: 20px; cursor:pointer' onclick='remove(this);'>remove</span>"; 
 		d1.id = s;
+		d1.weight = w;
 		d.appendChild(d1);
 		save_options();
 	}

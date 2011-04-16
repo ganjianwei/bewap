@@ -17,7 +17,11 @@ chrome.extension.sendRequest({location: document.location}, function(response) {
 		var service = sites["flashcards"];
 		if(response.service && sites[response.service])
 			service = sites[response.service];
-		document.location = service + "?uid=" + response.uid + "&w=1";
+
+		var weight = 1;
+		if(response.weight)
+			weight = response.weight;
+		document.location = service + "?uid=" + response.uid + "&w="+weight;
 	} else if (response.finishedTask) {
 		console.log("Destination: %s", response.destination);
 		document.location = response.destination;

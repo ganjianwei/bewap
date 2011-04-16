@@ -25,7 +25,8 @@ chrome.extension.onRequest.addListener(
 			sendResponse({
 				shouldBlock: shouldBlock(host,loc.href),
 				uid: getUID(host),
-				service: localStorage["bewap_service"]
+				service: localStorage["bewap_service"],
+				weight: localStorage["weight:"+host]
 			});
 		}
     }

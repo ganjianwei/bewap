@@ -1,5 +1,5 @@
 {
-  "name": "Faceblock",
+  "name": "BEWAP",
   "version": "1.0",
   "background_page": "background.html",
   "description": "Stops you from procrastinating by making you do more tasks to get to your destination site.",
@@ -14,9 +14,6 @@
       "js": ["myscript.js"],
       "run_at" : "document_start"
     }
-  ],
-  "permissions": [
-    "http://api.flickr.com/"
   ]
 }
 
