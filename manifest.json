@@ -1,0 +1,21 @@
+{
+  "name": "Faceblock",
+  "version": "1.0",
+  "background_page": "background.html",
+  "description": "Stops you from procrastinating by making you do more tasks to get to your destination site.",
+  "browser_action": {
+    "default_icon": "icon.png" 
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      // "css": ["mystyles.css"],
+      "js": ["myscript.js"],
+      "run_at" : "document_start"
+    }
+  ],
+  "permissions": [
+    "http://api.flickr.com/"
+  ]
+}
+
