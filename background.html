@@ -10,6 +10,7 @@ if (localStorage["blacklist.0.url"] == null) {
 }
 
 var RESET_BLACKLIST_TIME = 1000 * 60 * 20; // in milliseconds, last number is minutes
+var RESET_BLACKLIST_TIME = 1000; // For test, 1 second reset
 
 chrome.extension.onRequest.addListener(
     function(request, sender, sendResponse) {
